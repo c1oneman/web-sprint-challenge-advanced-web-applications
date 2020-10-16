@@ -1,21 +1,32 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import './App.css';
+import { connect } from 'react-redux';
+import Login from './components/Login';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
+import BubblesPage from './components/BubblePage'
 
-import Login from "./components/Login";
-import "./styles.scss";
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <header>
+            <Link to='/login'> Login </Link>
+          </header>
 
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Route exact path="/" component={Login} />
-        {/* 
-          Build a PrivateRoute component that will 
-          display BubblePage when you're authenticated 
-        */}
-      </div>
-    </Router>
-  );
+          <Route path='/login' component={Login} />
+          <PrivateRoute exact path='/bubbles' component={BubblesPage} />
+        </div>
+      </Router>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state =>{
+  return{
+    bubbles: state.bubbles
+  }
+}
+
+export default connect(mapStateToProps, {})(App);
